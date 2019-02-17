@@ -124,8 +124,8 @@ class FileViewer extends React.PureComponent<Props> {
   handleKeyDown(event: SyntheticKeyboardEvent<*>) {
     const { searchBarFocused } = this.props;
     if (!searchBarFocused && event.keyCode === SPACE_BAR_KEYCODE) {
-      event.preventDefault(); // prevent page scroll
-      this.playContent();
+      // event.preventDefault(); // prevent page scroll
+      // this.playContent();
     }
   }
 
