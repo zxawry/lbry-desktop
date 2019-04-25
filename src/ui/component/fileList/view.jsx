@@ -130,6 +130,7 @@ class FileList extends React.PureComponent<Props> {
       return null;
     }
 
+    console.time('sort');
     this.sortFunctions[sortBy](fileInfos).forEach(fileInfo => {
       const {
         name: claimName,
@@ -152,6 +153,8 @@ class FileList extends React.PureComponent<Props> {
       // See https://github.com/lbryio/lbry-desktop/issues/1327 for discussion around using outpoint as the key
       content.push(<FileCard key={outpoint} uri={uri} isNew={isNew} />);
     });
+    console.timeEnd('sort');
+    console.log('\n\n');
 
     return (
       <section>
