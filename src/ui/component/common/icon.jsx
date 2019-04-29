@@ -8,7 +8,7 @@ import { customIcons } from './icon-custom';
 let featherIcons = false;
 const featherIconsPromise = import(/* webpackChunkName: "react-feather" */
 /* webpackPrefetch: true */
-'react-feather').then(result => (featherIcons = result));
+  'react-feather').then(result => (featherIcons = result));
 
 const LazyFeatherIcons = new Proxy(
   {},
@@ -89,12 +89,16 @@ class IconComponent extends React.PureComponent<Props> {
           <svg
             height={iconSize}
             width={iconSize}
-            className={classnames('icon', className)}
+            className={classnames(`icon icon--${icon}`, className)}
             color={color}
           />
         }
       >
-        <Icon size={iconSize} className={classnames('icon', className)} color={color} />
+        <Icon
+          size={iconSize}
+          className={classnames(`icon icon--${icon}`, className)}
+          color={color}
+        />
       </React.Suspense>
     );
 
