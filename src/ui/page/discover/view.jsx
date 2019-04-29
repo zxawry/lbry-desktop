@@ -3,6 +3,7 @@ import React from 'react';
 import Page from 'component/page';
 import CategoryList from 'component/categoryList';
 import FirstRun from 'component/firstRun';
+import Discovery from 'component/discoveryFirstRun';
 
 type Props = {
   fetchFeaturedUris: () => void,
@@ -63,6 +64,7 @@ class DiscoverPage extends React.PureComponent<Props> {
     return (
       <Page noPadding isLoading={!hasContent && fetchingFeaturedUris}>
         <FirstRun />
+        <Discovery />
         {hasContent &&
           Object.keys(featuredUris).map(category => (
             <CategoryList
