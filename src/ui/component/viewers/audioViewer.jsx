@@ -68,7 +68,7 @@ class AudioVideoViewer extends React.PureComponent {
     const me = this;
     const { contentType, poster, claim } = me.props;
 
-    const path = `https://api.lbry.tv/content/claims/${claim.name}/${claim.claim_id}/stream.mp4`;
+    const path = `http://localhost:5279/get/${claim.name}/${claim.claim_id}`;
     const sources = [
       {
         src: path,
@@ -186,7 +186,7 @@ class AudioVideoViewer extends React.PureComponent {
 
     const renderArt = enableArt && artLoaded;
 
-    const path = `https://api.lbry.tv/content/claims/${claim.name}/${claim.claim_id}/stream.mp4`;
+    const path = `http://localhost:5279/get/${claim.name}/${claim.claim_id}`;
 
     const playButton = (
       <div
