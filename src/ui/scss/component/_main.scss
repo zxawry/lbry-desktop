@@ -1,13 +1,18 @@
 .main-wrapper {
   position: absolute;
   top: var(--header-height);
-  left: var(--side-nav-width);
   min-height: calc(100% - var(--header-height));
-  width: calc(100% - var(--side-nav-width));
+  width: 100%;
   background-color: mix($lbry-white, $lbry-gray-1, 70%);
 
   html[data-mode='dark'] & {
     background-color: $lbry-black;
+  }
+
+  @media (min-width: 600px) {
+    left: var(--side-nav-width);
+
+    width: calc(100% - var(--side-nav-width));
   }
 }
 

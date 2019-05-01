@@ -1,143 +1,80 @@
 // @flow
-import * as icons from 'constants/icons';
-import * as MODALS from 'constants/modal_types';
-import React, { useEffect } from 'react';
-import BusyIndicator from 'component/common/busy-indicator';
-import { FormField, Form } from 'component/common/form';
-import ReactPaginate from 'react-paginate';
-import SubscribeButton from 'component/subscribeButton';
+import React, { useEffect, useState } from 'react';
+import { parseURI } from 'lbry-redux';
 import Page from 'component/page';
-import FileList from 'component/fileList';
-import HiddenNsfwClaims from 'component/hiddenNsfwClaims';
-import Button from 'component/button';
-import { withRouter } from 'react-router-dom';
+import SubscribeButton from 'component/subscribeButton';
+import ShareButton from 'component/shareButton';
+import classNames from 'classnames';
+import { AnimatedTab, AnimatedTabs } from 'component/common/animated-tabs';
+import { TabList, TabPanels, TabPanel } from '@reach/tabs';
+import { withRouter } from 'react-router';
+import { formatLbryUriForWeb } from 'util/uri';
+import ChannelContent from 'component/channelContent';
+import ChannelAbout from 'component/channelAbout';
 
 type Props = {
   uri: string,
-  totalPages: number,
-  fetching: boolean,
-  params: { page: number },
-  claim: ChannelClaim,
-  claimsInChannel: Array<StreamClaim>,
-  channelIsMine: boolean,
-  fetchClaims: (string, number) => void,
+  title: ?string,
+  cover: ?string,
+  thumbnail: ?string,
   history: { push: string => void },
-  openModal: (id: string, { uri: string }) => void,
-  location: UrlLocation,
+  match: { params: { attribute: ?string } },
 };
 
 function ChannelPage(props: Props) {
-  const {
-    uri,
-    fetching,
-    claimsInChannel,
-    claim,
-    totalPages,
-    channelIsMine,
-    openModal,
-    fetchClaims,
-    location,
-    history,
-  } = props;
+  const { uri, title, cover, thumbnail, history, match } = props;
+  const { channelName, claimName, claimId } = parseURI(uri);
+  const { params } = match;
 
-  const { name, permanent_url: permanentUrl } = claim;
-  const { search } = location;
-  const urlParams = new URLSearchParams(search);
-  const page = Number(urlParams.get('page')) || 1;
-
-  useEffect(() => {
-    // Fetch new claims if the channel or page number changes
-    fetchClaims(uri, page);
-  }, [uri, page]);
-
-  const changePage = (pageNumber: number) => {
-    if (!page && pageNumber === 1) {
-      return;
+  const tabIndex = params.attribute === 'about' ? 1 : 0;
+  const onTabChange = newTabIndex => {
+    let url = formatLbryUriForWeb(uri);
+    if (newTabIndex !== 0) {
+      url += '/about';
     }
 
-    history.push(`?page=${pageNumber}`);
-  };
-
-  const paginate = (e: SyntheticKeyboardEvent<*>) => {
-    // Change page if enter was pressed, and the given page is between the first and the last page
-    const pageFromInput = Number(e.currentTarget.value);
-
-    if (
-      pageFromInput &&
-      e.keyCode === 13 &&
-      !Number.isNaN(pageFromInput) &&
-      pageFromInput > 0 &&
-      pageFromInput <= totalPages
-    ) {
-      changePage(pageFromInput);
-    }
+    history.push(url + '/');
   };
 
   return (
-    <Page notContained>
-      <header className="channel-info">
-        <h1 className="media__title media__title--large">
-          {name}
-          {fetching && <BusyIndicator />}
-        </h1>
-        <span>{permanentUrl}</span>
-
-        <div className="channel-info__actions__group">
-          <SubscribeButton uri={permanentUrl} channelName={name} />
-          <Button
-            button="alt"
-            icon={icons.SHARE}
-            label={__('Share Channel')}
-            onClick={() =>
-              openModal(MODALS.SOCIAL_SHARE, { uri, speechShareable: true, isChannel: true })
-            }
-          />
+    <Page notContained noPadding>
+      <header className="channel__cover">
+        {cover && <img className="channel__cover--custom" src={cover} />}
+        <div className="channel__profile">
+          <div className="channel__thumbnail">
+            {thumbnail && <img className="channel__thumbnail--custom" src={thumbnail} />}
+          </div>
+          <div className="channel__info">
+            <h1 className="channel__title">{title || channelName}</h1>
+            <h2 className="channel__url">
+              {claimName}#{claimId}
+            </h2>
+          </div>
         </div>
       </header>
 
-      <section className="media-group--list">
-        {claimsInChannel && claimsInChannel.length ? (
-          <FileList sortByHeight hideFilter fileInfos={claimsInChannel} />
-        ) : (
-          !fetching && <span className="empty">{__('No content found.')}</span>
-        )}
-      </section>
+      <div className="channel__wrapper">
+        <div className="channel__actions">
+          <ShareButton uri={uri} />
+          <SubscribeButton uri={uri} />
+        </div>
 
-      {(!fetching || (claimsInChannel && claimsInChannel.length)) && totalPages > 1 && (
-        <Form>
-          <fieldset-group class="fieldset-group--smushed fieldgroup--paginate">
-            <fieldset-section>
-              <ReactPaginate
-                pageCount={totalPages}
-                pageRangeDisplayed={2}
-                previousLabel="‹"
-                nextLabel="›"
-                activeClassName="pagination__item--selected"
-                pageClassName="pagination__item"
-                previousClassName="pagination__item pagination__item--previous"
-                nextClassName="pagination__item pagination__item--next"
-                breakClassName="pagination__item pagination__item--break"
-                marginPagesDisplayed={2}
-                onPageChange={e => changePage(e.selected + 1)}
-                forcePage={page - 1}
-                initialPage={page - 1}
-                disableInitialCallback
-                containerClassName="pagination"
-              />
-            </fieldset-section>
+        <AnimatedTabs className="channel__content-wrapper" onChange={onTabChange} index={tabIndex}>
+          <TabList className="channel__tabs">
+            <AnimatedTab>Content</AnimatedTab>
+            <AnimatedTab>About</AnimatedTab>
+          </TabList>
 
-            <FormField
-              className="paginate-channel"
-              onKeyUp={e => paginate(e)}
-              label={__('Go to page:')}
-              type="text"
-              name="paginate-file"
-            />
-          </fieldset-group>
-        </Form>
-      )}
-
-      {!channelIsMine && <HiddenNsfwClaims className="card__content help" uri={uri} />}
+          <TabPanels className="channel__content">
+            <TabPanel>
+              <ChannelContent uri={uri} />
+            </TabPanel>
+            <TabPanel>
+              <ChannelAbout uri={uri} />
+            </TabPanel>
+          </TabPanels>
+        </AnimatedTabs>
+      </div>
     </Page>
   );
 }

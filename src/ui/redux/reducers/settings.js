@@ -29,7 +29,7 @@ const defaultState = {
     [SETTINGS.FIRST_RUN_COMPLETED]: getLocalStorageSetting(SETTINGS.FIRST_RUN_COMPLETED, false),
     [SETTINGS.CREDIT_REQUIRED_ACKNOWLEDGED]: false, // this needs to be re-acknowledged every run
     [SETTINGS.LANGUAGE]: getLocalStorageSetting(SETTINGS.LANGUAGE, 'en'),
-    [SETTINGS.THEME]: getLocalStorageSetting(SETTINGS.THEME, 'dark'),
+    [SETTINGS.THEME]: getLocalStorageSetting(SETTINGS.THEME, 'light'),
     [SETTINGS.THEMES]: getLocalStorageSetting(SETTINGS.THEMES, []),
     [SETTINGS.AUTOMATIC_DARK_MODE_ENABLED]: getLocalStorageSetting(
       SETTINGS.AUTOMATIC_DARK_MODE_ENABLED,

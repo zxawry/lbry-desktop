@@ -58,8 +58,7 @@ export default function AppRouter() {
         <Route path={`/$/${PAGES.HISTORY}/all`} exact component={NavigationHistory} />
 
         {/* Below need to go at the end to make sure we don't match any of our pages first */}
-        <Route path="/:claimName/:claimId" component={ShowPage} />
-        <Route path="/:claimName" component={ShowPage} />
+        <Route path="/:claimName/:claimId?/:attribute?" component={ShowPage} />
       </Switch>
     </Scroll>
   );
