@@ -41,7 +41,7 @@ export default (props: Props) => {
             <div className="card__actions card__actions--no-margin">
               <Button
                 disabled={viewMode === VIEW_ALL}
-                selected={viewMode === VIEW_ALL}
+                className={viewMode === VIEW_ALL && 'button--subscription-view-selected'}
                 button="link"
                 label="All Subscriptions"
                 onClick={() => doSetViewMode(VIEW_ALL)}
@@ -49,7 +49,7 @@ export default (props: Props) => {
               <Button
                 button="link"
                 disabled={viewMode === VIEW_LATEST_FIRST}
-                selected={viewMode === VIEW_LATEST_FIRST}
+                className={viewMode === VIEW_LATEST_FIRST && 'button--subscription-view-selected'}
                 label={__('Latest Only')}
                 onClick={() => doSetViewMode(VIEW_LATEST_FIRST)}
               />
@@ -93,8 +93,10 @@ export default (props: Props) => {
           {viewMode === VIEW_ALL && (
             <Fragment>
               <div className="card__title--flex">
-                <h2 className="card__title">{__('Your subscriptions')}</h2>
-                {unreadSubscriptions.length > 0 && <MarkAsRead />}
+                <h2 className="card__title">
+                  {__('Your subscriptions')}
+                  {unreadSubscriptions.length > 0 && <MarkAsRead />}
+                </h2>
               </div>
               <FileList hideFilter sortByHeight fileInfos={subscriptions} />
             </Fragment>
