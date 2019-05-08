@@ -6,7 +6,7 @@ const selectState = state => state.tags || {};
 // Returns the list of channel uris a user is subscribed to
 export const selectTags = createSelector(
   selectState,
-  state => state.myTags
+  state => state.seenTags
 );
 
 export const selectFollwedTags = createSelector(
