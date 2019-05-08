@@ -21,6 +21,7 @@ class DiscoverPage extends React.PureComponent<Props> {
 
   componentDidMount() {
     const { fetchFeaturedUris, fetchRewardedContent, fetchRewards } = this.props;
+
     fetchFeaturedUris();
     fetchRewardedContent();
 
@@ -37,9 +38,11 @@ class DiscoverPage extends React.PureComponent<Props> {
 
   getCategoryLinkPartByCategory(category: string) {
     const channelName = category.substr(category.indexOf('@'));
+
     if (!channelName.includes('#')) {
       return null;
     }
+
     return channelName;
   }
 

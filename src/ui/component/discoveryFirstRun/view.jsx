@@ -1,62 +1,52 @@
+// @flow
 import React, { useEffect, useState } from 'react';
 import vis from 'vis';
+import { Form, FormField } from 'component/common/form';
 
-const edges = new vis.DataSet();
-
-const nodes = new vis.DataSet([
-  { label: 'Pop' },
-  { label: 'Alternative' },
-  { label: 'Rock' },
-  { label: 'Jazz' },
-  { label: 'Hits' },
-  { label: 'Dance' },
-  { label: 'Metal' },
-  { label: 'Experimental' },
-  { label: 'Rap' },
-  { label: 'Electronic' },
-]);
-
-const data = {
-  edges,
-  nodes,
+type Props = {
+  onSelect: string => void,
+  selected: Array<string>,
+  selectableTags: Array<string>,
 };
 
-const options = {
-  nodes: {
-    borderWidth: 0,
-    shape: 'circle',
-    color: {
-      background: '#F92C55',
-      highlight: {
-        background: '#F92C55',
-        border: '#F92C55',
-      },
-    },
-    font: {
-      color: '#fff',
-    },
-  },
-  physics: {
-    stabilization: false,
-    minVelocity: 0.01,
-    solver: 'repulsion',
-    repulsion: {
-      nodeDistance: 40,
-    },
-  },
-};
+export default function DiscoveryFirstRun(props: Props) {
+  console.log('props', props);
 
-// const container = document.getElementById('bubbles');
-// const network = new vis.Network(container, data, options);
+  const { tags, doToggleTag, doDeleteTag } = props;
+  const [newTag, setNewTag] = useState('');
 
-const wrapperRef = React.createRef();
+  function onChange(e) {
+    setNewTag(e.target.value);
+  }
 
-export default function DiscoveryFirstRun() {
-  useEffect(function() {
-    let network = new vis.Network(wrapperRef, data, options);
-    // Cleanup on unmount
-    // network = ...
-  }, []);
+  function handleSubmit() {
+    doToggleTag(newTag);
+    setNewTag('');
+  }
 
-  return <div ref={wrapperRef} />;
+  return (
+    <section className="discover-section">
+      <Form onSubmit={handleSubmit}>
+        <FormField type="text" value={newTag} onChange={onChange} />
+      </Form>
+      {tags.map(tag => {
+        return (
+          <div key={tag.label}>
+            <div
+              onClick={() => doToggleTag(tag.label)}
+              style={{
+                backgroundColor: tag.isMyTag ? 'green' : '',
+                borderColor: 'black',
+                borderStyle: 'dotted',
+                borderWidth: 1,
+              }}
+            >
+              {tag.label}
+            </div>
+            <div onClick={() => doDeleteTag(tag)}>&times;</div>
+          </div>
+        );
+      })}
+    </section>
+  );
 }
