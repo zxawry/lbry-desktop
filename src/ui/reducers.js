@@ -21,6 +21,7 @@ import contentReducer from 'redux/reducers/content';
 import settingsReducer from 'redux/reducers/settings';
 import subscriptionsReducer from 'redux/reducers/subscriptions';
 import publishReducer from 'redux/reducers/publish';
+import tagsReducer from 'redux/reducers/tags';
 
 export default history =>
   combineReducers({
@@ -40,6 +41,7 @@ export default history =>
     settings: settingsReducer,
     stats: statsReducer,
     subscriptions: subscriptionsReducer,
+    tags: tagsReducer,
     user: userReducer,
     wallet: walletReducer,
   });

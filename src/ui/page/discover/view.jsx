@@ -65,7 +65,7 @@ class DiscoverPage extends React.PureComponent<Props> {
       <Page noPadding isLoading={!hasContent && fetchingFeaturedUris}>
         <FirstRun />
         <Discovery />
-        {hasContent &&
+        {/* {hasContent &&
           Object.keys(featuredUris).map(category => (
             <CategoryList
               lazyLoad
@@ -74,7 +74,7 @@ class DiscoverPage extends React.PureComponent<Props> {
               uris={featuredUris[category]}
               categoryLink={this.getCategoryLinkPartByCategory(category)}
             />
-          ))}
+          ))} */}
         {failedToLoad && <div className="empty">{__('Failed to load landing content.')}</div>}
       </Page>
     );
