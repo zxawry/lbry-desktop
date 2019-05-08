@@ -6,7 +6,7 @@
   justify-content: space-between;
   z-index: 2; // Main content uses z-index: 1, this ensures it always scrolls under the header
   background-color: $lbry-white;
-  border-bottom: 1px solid $lbry-gray-1;
+  // border-bottom: 1px solid $lbry-gray-1;
 
   html[data-mode='dark'] & {
     background-color: rgba($lbry-black, 0.9);
@@ -98,7 +98,7 @@
 
 .header__navigation-item--right-action:not(:last-child),
 .header__navigation-item--lbry {
-  border-right: 1px solid $lbry-gray-1;
+  // border-right: 1px solid $lbry-gray-1;
 
   html[data-mode='dark'] & {
     border-right: 1px solid $lbry-gray-5;

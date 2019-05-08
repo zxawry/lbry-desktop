@@ -180,7 +180,7 @@ class FileTile extends React.PureComponent<Props> {
 
           {size !== 'small' && this.renderFileProperties()}
 
-          {!name && (
+          {!name && displayHiddenMessage && (
             <Yrbl
               className="yrbl--search"
               title={__("You get first dibs! There aren't any files here yet.")}

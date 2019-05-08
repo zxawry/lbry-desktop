@@ -28,25 +28,26 @@
     display: none;
   }
 
-  &::before {
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
+  // &::before {
+  // top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  border-top-right-radius: var(--card-radius);
 
-    // TODO: Make this gradient "to bottom" on mobile view
-    background-image: linear-gradient(to right, transparent, rgba(mix($lbry-blue-3, $lbry-gray-4, 15%), 0.2) 100%);
-    content: '';
-    position: absolute;
+  // TODO: Make this gradient "to bottom" on mobile view
+  background-image: linear-gradient(to right, transparent, rgba(mix($lbry-blue-3, $lbry-gray-4, 15%), 0.2) 100%);
+  content: '';
+  // position: absolute;
 
-    html[data-mode='dark'] & {
-      background-image: linear-gradient(
-        to bottom right,
-        transparent,
-        rgba(mix($lbry-blue-3, $lbry-gray-4, 15%), 0.2) 100%
-      );
-    }
+  html[data-mode='dark'] & {
+    background-image: linear-gradient(
+      to bottom right,
+      transparent,
+      rgba(mix($lbry-blue-3, $lbry-gray-4, 15%), 0.2) 100%
+    );
   }
+  // }
 }
 
 .navigation__links {

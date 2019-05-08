@@ -131,7 +131,7 @@ class WunderBar extends React.PureComponent<Props, State> {
 
     return (
       <div className="wunderbar">
-        <Icon icon={ICONS.SEARCH} />
+        <Icon icon={ICONS.SEARCH} size={100} />
         <Autocomplete
           autoHighlight
           wrapperStyle={{ flex: 1, position: 'relative' }}
