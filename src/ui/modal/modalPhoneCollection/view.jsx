@@ -3,7 +3,7 @@ import React, { Suspense } from 'react';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
 import UserPhoneVerify from 'component/userPhoneVerify';
-import { withRouter } from 'react-router-dom';
+import { Redirect } from 'react-router';
 
 const LazyUserPhoneNew = React.lazy(() =>
   import(/* webpackChunkName: "userPhoneNew" */
@@ -30,7 +30,7 @@ class ModalPhoneCollection extends React.PureComponent<Props> {
   }
 
   renderInner() {
-    const { closeModal, phone, user, history } = this.props;
+    const { closeModal, phone, user } = this.props;
 
     const cancelButton = <Button button="link" onClick={closeModal} label={__('Not Now')} />;
 
@@ -44,8 +44,8 @@ class ModalPhoneCollection extends React.PureComponent<Props> {
       return <UserPhoneVerify cancelButton={cancelButton} />;
     }
 
-    history.push('/$/rewards');
-    return closeModal();
+    closeModal();
+    return <Redirect to="/$/rewards" />;
   }
 
   render() {
@@ -64,4 +64,4 @@ class ModalPhoneCollection extends React.PureComponent<Props> {
   }
 }
 
-export default withRouter(ModalPhoneCollection);
+export default ModalPhoneCollection;
