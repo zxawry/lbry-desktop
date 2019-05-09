@@ -1,4 +1,5 @@
 // @flow
+import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 import vis from 'vis';
 import { Form, FormField } from 'component/common/form';
@@ -26,27 +27,36 @@ export default function DiscoveryFirstRun(props: Props) {
 
   return (
     <section className="discover-section">
+      <h1 className="discover-section__title">Discover</h1>
+
       <Form onSubmit={handleSubmit}>
-        <FormField type="text" value={newTag} onChange={onChange} />
+        <FormField
+          onChange={onChange}
+          placeholder="Search for more tags"
+          type="text"
+          value={newTag}
+        />
       </Form>
-      {tags.map(tag => {
-        return (
-          <div key={tag.label}>
+
+      <div className="discover-section__tags">
+        {tags.map(tag => {
+          return (
             <div
+              className={classNames({
+                'discover-section__tag': true,
+                selected: tag.isMyTag,
+              })}
               onClick={() => doToggleTag(tag.label)}
-              style={{
-                backgroundColor: tag.isMyTag ? 'green' : '',
-                borderColor: 'black',
-                borderStyle: 'dotted',
-                borderWidth: 1,
-              }}
+              key={tag.label}
             >
               {tag.label}
+              <span className="discover-section__tag-close" onClick={() => doDeleteTag(tag)}>
+                &times;
+              </span>
             </div>
-            <div onClick={() => doDeleteTag(tag)}>&times;</div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </section>
   );
 }
