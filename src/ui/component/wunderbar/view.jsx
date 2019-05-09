@@ -7,6 +7,7 @@ import { normalizeURI, SEARCH_TYPES, isURIValid, buildURI } from 'lbry-redux';
 import Icon from 'component/common/icon';
 import { parseQueryParams } from 'util/query-params';
 import Autocomplete from './internal/autocomplete';
+import { withRouter } from 'react-router';
 
 const L_KEY_CODE = 76;
 const ESC_KEY_CODE = 27;
@@ -127,56 +128,58 @@ class WunderBar extends React.PureComponent<Props, State> {
   input: ?HTMLInputElement;
 
   render() {
-    const { suggestions, doFocus, doBlur, searchQuery } = this.props;
+    const { suggestions, doFocus, doBlur, searchQuery, location } = this.props;
 
     return (
-      <div className="wunderbar">
-        <Icon icon={ICONS.SEARCH} size={100} />
-        <Autocomplete
-          autoHighlight
-          wrapperStyle={{ flex: 1, position: 'relative' }}
-          value={searchQuery}
-          items={suggestions}
-          getItemValue={item => item.value}
-          onChange={this.handleChange}
-          onSelect={this.handleSubmit}
-          inputProps={{
-            onFocus: doFocus,
-            onBlur: doBlur,
-          }}
-          renderInput={props => (
-            <input
-              {...props}
-              ref={el => {
-                props.ref(el);
-                this.input = el;
-              }}
-              className="wunderbar__input"
-              placeholder="Enter a LBRY URL here or search for videos, music, games and more"
-            />
-          )}
-          renderItem={({ value, type }, isHighlighted) => (
-            <div
-              key={value}
-              className={classnames('wunderbar__suggestion', {
-                'wunderbar__active-suggestion': isHighlighted,
-              })}
-            >
-              <Icon icon={this.getSuggestionIcon(type)} />
-              <span className="wunderbar__suggestion-label">{value}</span>
-              {isHighlighted && (
-                <span className="wunderbar__suggestion-label--action">
-                  {type === SEARCH_TYPES.SEARCH && __('Search')}
-                  {type === SEARCH_TYPES.CHANNEL && __('View channel')}
-                  {type === SEARCH_TYPES.FILE && __('View file')}
-                </span>
-              )}
-            </div>
-          )}
-        />
-      </div>
+      location.pathname !== '/' && (
+        <div className="wunderbar">
+          <Icon icon={ICONS.SEARCH} />
+          <Autocomplete
+            autoHighlight
+            wrapperStyle={{ flex: 1, position: 'relative' }}
+            value={searchQuery}
+            items={suggestions}
+            getItemValue={item => item.value}
+            onChange={this.handleChange}
+            onSelect={this.handleSubmit}
+            inputProps={{
+              onFocus: doFocus,
+              onBlur: doBlur,
+            }}
+            renderInput={props => (
+              <input
+                {...props}
+                ref={el => {
+                  props.ref(el);
+                  this.input = el;
+                }}
+                className="wunderbar__input"
+                placeholder="Enter a LBRY URL here or search for videos, music, games and more"
+              />
+            )}
+            renderItem={({ value, type }, isHighlighted) => (
+              <div
+                key={value}
+                className={classnames('wunderbar__suggestion', {
+                  'wunderbar__active-suggestion': isHighlighted,
+                })}
+              >
+                <Icon icon={this.getSuggestionIcon(type)} />
+                <span className="wunderbar__suggestion-label">{value}</span>
+                {isHighlighted && (
+                  <span className="wunderbar__suggestion-label--action">
+                    {type === SEARCH_TYPES.SEARCH && __('Search')}
+                    {type === SEARCH_TYPES.CHANNEL && __('View channel')}
+                    {type === SEARCH_TYPES.FILE && __('View file')}
+                  </span>
+                )}
+              </div>
+            )}
+          />
+        </div>
+      )
     );
   }
 }
 
-export default WunderBar;
+export default withRouter(WunderBar);

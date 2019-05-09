@@ -3,6 +3,7 @@ import React from 'react';
 import Page from 'component/page';
 import CategoryList from 'component/categoryList';
 import FirstRun from 'component/firstRun';
+import Icon from 'component/common/icon';
 import { Form, FormField } from 'component/common/form';
 import SearchOptions from 'component/searchOptions';
 import { SEARCH_OPTIONS } from 'lbry-redux';
@@ -19,6 +20,10 @@ class DiscoverPage extends React.PureComponent<Props> {
   constructor() {
     super();
     this.continousFetch = undefined;
+
+    this.state = {
+      query: '',
+    };
   }
 
   componentDidMount() {
@@ -59,130 +64,31 @@ class DiscoverPage extends React.PureComponent<Props> {
   }
 
   render() {
-    const { featuredUris, fetchingFeaturedUris } = this.props;
+    const { featuredUris, fetchingFeaturedUris, history } = this.props;
     const hasContent = typeof featuredUris === 'object' && Object.keys(featuredUris).length;
     const failedToLoad = !fetchingFeaturedUris && !hasContent;
 
     return (
       <Page notContained isLoading={!hasContent && fetchingFeaturedUris} className="main--no-padding">
-        <FirstRun />
+        {!IS_WEB && <FirstRun />}
         <div className="home">
-          <div className="h">
-            <Form>
+          <div className="search-wrapper">
+            <Form
+              onSubmit={() =>
+                history.push({ pathname: `/$/search`, search: `?q=${encodeURIComponent(this.state.query)}` })
+              }
+            >
               <div className="big">
-                <FormField type="text" className="in" placeholder="Search..." />
+                <Icon icon="Search" size={48} />
+                <FormField
+                  value={this.state.query}
+                  onChange={e => console.log('e', e) || this.setState({ query: e.target.value })}
+                  type="text"
+                  className="in"
+                  placeholder="Search..."
+                />
               </div>
-              <div className="options">
-                <div className="">
-                  <h3>For</h3>
-                  {[
-                    {
-                      option: SEARCH_OPTIONS.INCLUDE_FILES,
-                      label: __('Files'),
-                    },
-                    {
-                      option: SEARCH_OPTIONS.INCLUDE_FILES,
-                      label: __('Downloads'),
-                    },
-                    {
-                      option: SEARCH_OPTIONS.INCLUDE_CHANNELS,
-                      label: __('Channels'),
-                    },
-                    {
-                      option: SEARCH_OPTIONS.INCLUDE_FILES_AND_CHANNELS,
-                      label: __('Everything'),
-                    },
-                  ].map(({ option, label }, index) => (
-                    <div key={option}>
-                      <FormField
-                        defaultChecked={index === 2}
-                        name={option}
-                        type="radio"
-                        blockWrap={false}
-                        label={label}
-                      />
-                    </div>
-                  ))}
-                </div>
-                <div>
-                  <h3>File Type</h3>
-                  {[
-                    {
-                      option: SEARCH_OPTIONS.MEDIA_VIDEO,
-                      label: __('Videos'),
-                    },
-                    {
-                      option: SEARCH_OPTIONS.MEDIA_AUDIO,
-                      label: __('Audio'),
-                    },
-                    {
-                      option: SEARCH_OPTIONS.MEDIA_IMAGE,
-                      label: __('Images'),
-                    },
-                    {
-                      option: SEARCH_OPTIONS.MEDIA_TEXT,
-                      label: __('Text'),
-                    },
-                    {
-                      option: SEARCH_OPTIONS.MEDIA_APPLICATION,
-                      label: __('Other Files'),
-                    },
-                  ].map(({ option, label }) => (
-                    <div>
-                      <FormField
-                        key={option}
-                        name={option}
-                        type="checkbox"
-                        blockWrap={false}
-                        label={label}
-                        checked={true}
-                      />
-                    </div>
-                  ))}
-                </div>
-                <div>
-                  <h3>Returned Results</h3>
-                  <FormField
-                    type="select"
-                    name="result-count"
-                    value={50}
-                    blockWrap={false}
-                    // label={__('Returned Results')}
-                  >
-                    <option value={10}>10</option>
-                    <option value={30}>30</option>
-                    <option value={50}>50</option>
-                    <option value={100}>100</option>
-                  </FormField>
-
-                  <h3>Publish Date</h3>
-                  <FormField
-                    type="select"
-                    name="result-count"
-                    value={'Last 24 hours'}
-                    blockWrap={false}
-                    // label={__('Returned Results')}
-                  >
-                    <option value={10}>Last 24 hours</option>
-                    <option value={30}>30</option>
-                    <option value={50}>50</option>
-                    <option value={100}>100</option>
-                  </FormField>
-                </div>
-                <div>
-                  <h3 style={{ marginTop: 27 }}>Tags</h3>
-                  <FormField placeholder="Some category" type="text" name="result-count" blockWrap={false} />
-                  <div className="tags">
-                    <ul>
-                      <li className="chosen">Movies</li>
-                      <li>Video Games</li>
-                      <br />
-                      <li>Music</li>
-                      <li className="chosen">Free</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
+              <SearchOptions slim />
             </Form>
           </div>
         </div>

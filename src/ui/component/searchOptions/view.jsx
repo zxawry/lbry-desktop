@@ -19,6 +19,7 @@ type Props = {
   query: string,
   onFeedbackPositive: string => void,
   onFeedbackNegative: string => void,
+  slim?: boolean,
 };
 
 const SearchOptions = (props: Props) => {
@@ -30,28 +31,38 @@ const SearchOptions = (props: Props) => {
     query,
     onFeedbackPositive,
     onFeedbackNegative,
+    slim,
   } = props;
   const resultCount = options[SEARCH_OPTIONS.RESULT_COUNT];
 
+  const Wrapper = ({ children }) =>
+    console.log(children) || slim ? (
+      children
+    ) : (
+      <ExpandableOptions pose={expanded ? 'show' : 'hide'}>{children}</ExpandableOptions>
+    );
+
   return (
     <div className="search__options-wrapper">
-      <div className="card--space-between">
-        <Button
-          button="alt"
-          label={__('FILTER')}
-          iconRight={expanded ? ICONS.UP : ICONS.DOWN}
-          onClick={toggleSearchExpanded}
-        />
+      {!slim && (
+        <div className="card--space-between">
+          <Button
+            button="alt"
+            label={__('FILTER')}
+            iconRight={expanded ? ICONS.UP : ICONS.DOWN}
+            onClick={toggleSearchExpanded}
+          />
 
-        <div className="media__action-group">
-          <span>{__('Find what you were looking for?')}</span>
-          <Button button="alt" description={__('Yes')} onClick={() => onFeedbackPositive(query)} icon={ICONS.YES} />
-          <Button button="alt" description={__('No')} onClick={() => onFeedbackNegative(query)} icon={ICONS.NO} />
+          <div className="media__action-group">
+            <span>{__('Find what you were looking for?')}</span>
+            <Button button="alt" description={__('Yes')} onClick={() => onFeedbackPositive(query)} icon={ICONS.YES} />
+            <Button button="alt" description={__('No')} onClick={() => onFeedbackNegative(query)} icon={ICONS.NO} />
+          </div>
         </div>
-      </div>
-      <ExpandableOptions pose={expanded ? 'show' : 'hide'}>
+      )}
+      <Wrapper>
         {expanded && (
-          <Form className="card__content search__options">
+          <div className="card__content search__options">
             <fieldset>
               <legend className="search__legend--1">{__('Search For')}</legend>
               {[
@@ -117,25 +128,29 @@ const SearchOptions = (props: Props) => {
               ))}
             </fieldset>
 
-            <fieldset>
-              <legend className="search__legend--3">{__('Other Options')}</legend>
-              <FormField
-                type="select"
-                name="result-count"
-                value={resultCount}
-                onChange={e => setSearchOption(SEARCH_OPTIONS.RESULT_COUNT, e.target.value)}
-                blockWrap={false}
-                label={__('Returned Results')}
-              >
-                <option value={10}>10</option>
-                <option value={30}>30</option>
-                <option value={50}>50</option>
-                <option value={100}>100</option>
-              </FormField>
-            </fieldset>
-          </Form>
+            {!slim && (
+              <Form>
+                <fieldset>
+                  <legend className="search__legend--3">{__('Other Options')}</legend>
+                  <FormField
+                    type="select"
+                    name="result-count"
+                    value={resultCount}
+                    onChange={e => setSearchOption(SEARCH_OPTIONS.RESULT_COUNT, e.target.value)}
+                    blockWrap={false}
+                    label={__('Returned Results')}
+                  >
+                    <option value={10}>10</option>
+                    <option value={30}>30</option>
+                    <option value={50}>50</option>
+                    <option value={100}>100</option>
+                  </FormField>
+                </fieldset>
+              </Form>
+            )}
+          </div>
         )}
-      </ExpandableOptions>
+      </Wrapper>
     </div>
   );
 };

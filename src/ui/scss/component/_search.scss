@@ -77,69 +77,32 @@
 }
 
 .home {
-  padding: 5em;
   background-color: $lbry-white;
-  // height: 20rem;
 
-  .h {
+  .search-wrapper {
     width: 60vw;
-    // border-bottom: solid 0.3em lighten($lbry-black, 30%);
-    // margin-left: 4em;
     margin: auto;
+    padding-bottom: 2rem;
   }
 
   .big {
+    position: relative;
     input {
       &:not(:focus) {
         border: none !important;
       }
 
-      font-size: 6em;
+      background-color: $lbry-gray-1;
+      font-size: 4em;
       height: 1.5em;
-      // font-weight: bold;
       font-weight: 300;
     }
-  }
 
-  input {
-    margin: 0 !important;
-  }
-
-  h3 {
-    // font-weight: 700;
-    color: lighten($lbry-black, 50%);
-    margin-bottom: 5px;
-    margin-top: 30px;
-  }
-
-  .options {
-    display: flex;
-
-    & > * {
-      margin-right: 50px;
-    }
-  }
-
-  .tags {
-    ul {
-      display: flex;
-      flex-wrap: wrap;
-      max-width: 200px;
-
-      li {
-        padding: 2px 10px;
-        margin-right: 10px;
-        margin-bottom: 10px;
-        border: 1px solid $lbry-teal-4;
-        border-radius: 10px;
-        font-weight: 700;
-        color: $lbry-teal-4;
-
-        &.chosen {
-          background-color: $lbry-teal-4;
-          color: $lbry-white;
-        }
-      }
+    .icon {
+      position: absolute;
+      top: 1em;
+      left: -5em;
+      color: lighten($lbry-black, 70%);
     }
   }
 }
