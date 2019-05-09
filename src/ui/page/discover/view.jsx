@@ -64,7 +64,7 @@ class DiscoverPage extends React.PureComponent<Props> {
   }
 
   render() {
-    const { featuredUris, fetchingFeaturedUris, history } = this.props;
+    const { featuredUris, fetchingFeaturedUris, history, doUpdateSearchQuery } = this.props;
     const hasContent = typeof featuredUris === 'object' && Object.keys(featuredUris).length;
     const failedToLoad = !fetchingFeaturedUris && !hasContent;
 
@@ -74,15 +74,18 @@ class DiscoverPage extends React.PureComponent<Props> {
         <div className="home">
           <div className="search-wrapper">
             <Form
-              onSubmit={() =>
-                history.push({ pathname: `/$/search`, search: `?q=${encodeURIComponent(this.state.query)}` })
-              }
+              onSubmit={() => {
+                history.push({ pathname: `/$/search`, search: `?q=${encodeURIComponent(this.state.query)}` });
+              }}
             >
               <div className="big">
                 <Icon icon="Search" size={48} />
                 <FormField
+                  autoFocus
                   value={this.state.query}
-                  onChange={e => console.log('e', e) || this.setState({ query: e.target.value })}
+                  onChange={e => {
+                    this.setState({ query: e.target.value });
+                  }}
                   type="text"
                   className="in"
                   placeholder="Search..."

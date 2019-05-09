@@ -88,8 +88,9 @@
   .big {
     position: relative;
     input {
+      border: none !important;
+
       &:not(:focus) {
-        border: none !important;
       }
 
       background-color: $lbry-gray-1;

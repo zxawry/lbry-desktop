@@ -8,6 +8,7 @@ import Icon from 'component/common/icon';
 import { parseQueryParams } from 'util/query-params';
 import Autocomplete from './internal/autocomplete';
 import { withRouter } from 'react-router';
+import { Form } from 'component/common/form';
 
 const L_KEY_CODE = 76;
 const ESC_KEY_CODE = 27;
@@ -34,7 +35,7 @@ class WunderBar extends React.PureComponent<Props, State> {
     super();
 
     this.state = {
-      query: null,
+      query: '',
     };
 
     (this: any).handleSubmit = this.handleSubmit.bind(this);
@@ -87,13 +88,19 @@ class WunderBar extends React.PureComponent<Props, State> {
   handleChange(e: SyntheticInputEvent<*>) {
     const { value } = e.target;
     const { updateSearchQuery } = this.props;
-    updateSearchQuery(value);
+    // updateSearchQuery(value);
+    this.setState({ query: e.target.value });
+    // const { history } = this.props;
+    // history.push(`?search=${e.target.value}`);
   }
 
   handleSubmit(value: string, suggestion?: { value: string, type: string }) {
-    const { onSubmit, onSearch, doShowSnackBar } = this.props;
+    const { onSubmit, onSearch, doShowSnackBar, location } = this.props;
 
-    const query = value.trim();
+    // const { search } = location;
+    // const urlParams = new URLSearchParams(search);
+    // const urlQuery = urlParams.get('q');
+    const urlQuery = this.state.query;
     const showSnackError = () => {
       doShowSnackBar('Invalid LBRY URL entered. Only A-Z, a-z, 0-9, and "-" allowed.');
     };
@@ -101,9 +108,9 @@ class WunderBar extends React.PureComponent<Props, State> {
     // User selected a suggestion
     if (suggestion) {
       if (suggestion.type === 'search') {
-        onSearch(query);
-      } else if (isURIValid(query)) {
-        const uri = normalizeURI(query);
+        onSearch(urlQuery);
+      } else if (isURIValid(urlQuery)) {
+        const uri = normalizeURI(urlQuery);
         onSubmit(uri);
       } else {
         showSnackError();
@@ -111,18 +118,21 @@ class WunderBar extends React.PureComponent<Props, State> {
 
       return;
     }
+
+    onSearch(urlQuery);
+
     // Currently no suggestion is highlighted. The user may have started
     // typing, then lost focus and came back later on the same page
-    try {
-      if (isURIValid(query)) {
-        const uri = normalizeURI(query);
-        onSubmit(uri);
-      } else {
-        showSnackError();
-      }
-    } catch (e) {
-      onSearch(query);
-    }
+    // try {
+    //   if (isURIValid(urlQuery)) {
+    //     const uri = normalizeURI(urlQuery);
+    //     onSubmit(uri);
+    //   } else {
+    //     showSnackError();
+    //   }
+    // } catch (e) {
+    //   onSearch(urlQuery);
+    // }
   }
 
   input: ?HTMLInputElement;
@@ -130,56 +140,72 @@ class WunderBar extends React.PureComponent<Props, State> {
   render() {
     const { suggestions, doFocus, doBlur, searchQuery, location } = this.props;
 
+    const { search } = location;
+    const urlParams = new URLSearchParams(search);
+    const urlQuery = urlParams.get('q');
+
     return (
       location.pathname !== '/' && (
-        <div className="wunderbar">
-          <Icon icon={ICONS.SEARCH} />
-          <Autocomplete
-            autoHighlight
-            wrapperStyle={{ flex: 1, position: 'relative' }}
-            value={searchQuery}
-            items={suggestions}
-            getItemValue={item => item.value}
-            onChange={this.handleChange}
-            onSelect={this.handleSubmit}
-            inputProps={{
-              onFocus: doFocus,
-              onBlur: doBlur,
-            }}
-            renderInput={props => (
-              <input
-                {...props}
-                ref={el => {
-                  props.ref(el);
-                  this.input = el;
-                }}
-                className="wunderbar__input"
-                placeholder="Enter a LBRY URL here or search for videos, music, games and more"
-              />
-            )}
-            renderItem={({ value, type }, isHighlighted) => (
-              <div
-                key={value}
-                className={classnames('wunderbar__suggestion', {
-                  'wunderbar__active-suggestion': isHighlighted,
-                })}
-              >
-                <Icon icon={this.getSuggestionIcon(type)} />
-                <span className="wunderbar__suggestion-label">{value}</span>
-                {isHighlighted && (
-                  <span className="wunderbar__suggestion-label--action">
-                    {type === SEARCH_TYPES.SEARCH && __('Search')}
-                    {type === SEARCH_TYPES.CHANNEL && __('View channel')}
-                    {type === SEARCH_TYPES.FILE && __('View file')}
-                  </span>
-                )}
-              </div>
-            )}
-          />
-        </div>
+        <Form onSubmit={this.handleSubmit}>
+          <div className="wunderbar">
+            <Icon icon={ICONS.SEARCH} />
+            <input
+              value={this.state.query}
+              onChange={this.handleChange}
+              ref={el => (this.input = el)}
+              className="wunderbar__input"
+              placeholder="Enter a LBRY URL here or search for videos, music, games and more"
+            />
+          </div>
+        </Form>
       )
     );
   }
 }
 
 export default withRouter(WunderBar);
+/* <Autocomplete
+  autoHighlight
+  wrapperStyle={{ flex: 1, position: 'relative' }}
+  value={urlQuery}
+  items={suggestions}
+  getItemValue={item => item.value}
+  onChange={this.handleChange}
+  onSelect={this.handleSubmit}
+  inputProps={{
+    onFocus: doFocus,
+    onBlur: doBlur,
+  }}
+  renderInput={props => (
+    <input
+      {...props}
+      ref={el => {
+        props.ref(el);
+        this.input = el;
+      }}
+      className="wunderbar__input"
+      placeholder="Enter a LBRY URL here or search for videos, music, games and more"
+    />
+  )}
+  renderItem={({ value, type }, isHighlighted) =>
+    null && (
+      <div
+        key={value}
+        className={classnames('wunderbar__suggestion', {
+          'wunderbar__active-suggestion': isHighlighted,
+        })}
+      >
+        <Icon icon={this.getSuggestionIcon(type)} />
+        <span className="wunderbar__suggestion-label">{value}</span>
+        {isHighlighted && (
+          <span className="wunderbar__suggestion-label--action">
+            {type === SEARCH_TYPES.SEARCH && __('Search')}
+            {type === SEARCH_TYPES.CHANNEL && __('View channel')}
+            {type === SEARCH_TYPES.FILE && __('View file')}
+          </span>
+        )}
+      </div>
+    )
+  }
+/> */
+// </div>

@@ -6,6 +6,7 @@ import {
   doFetchFeaturedUris,
   selectFetchingFeaturedUris,
 } from 'lbryinc';
+import { doUpdateSearchQuery } from 'lbry-redux';
 import DiscoverPage from './view';
 
 const select = state => ({
@@ -17,6 +18,7 @@ const perform = dispatch => ({
   fetchFeaturedUris: () => dispatch(doFetchFeaturedUris()),
   fetchRewardedContent: () => dispatch(doFetchRewardedContent()),
   fetchRewards: () => dispatch(doRewardList()),
+  updateSearchQuery: query => dispatch(doUpdateSearchQuery(query)),
 });
 
 export default connect(
