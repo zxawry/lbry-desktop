@@ -6498,9 +6498,9 @@ lazy-val@^1.0.3, lazy-val@^1.0.4:
     yargs "^13.2.2"
     zstd-codec "^0.1.1"
 
-lbry-redux@lbryio/lbry-redux#423123f1c19e61cead67c745d0892a2e4481cb6a:
+lbry-redux@lbryio/lbry-redux#c8126ab21792d7a85e1123a2363af285a0263654:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/423123f1c19e61cead67c745d0892a2e4481cb6a"
+  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/c8126ab21792d7a85e1123a2363af285a0263654"
   dependencies:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
@@ -8176,6 +8176,11 @@ pend@~1.2.0:
   resolved "https://registry.yarnpkg.com/pend/-/pend-1.2.0.tgz#7a57eb550a6783f9115331fcf4663d5c8e007a50"
   integrity sha1-elfrVQpng/kRUzH89GY9XI4AelA=
 
+perfect-scrollbar@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/perfect-scrollbar/-/perfect-scrollbar-1.4.0.tgz#5d014ef9775e1f43058a1dbae9ed1daf0e7091f1"
+  integrity sha512-/2Sk/khljhdrsamjJYS5NjrH+GKEHEwh7zFSiYyxROyYKagkE4kSn2zDQDRTOMo8mpT2jikxx6yI1dG7lNP/hw==
+
 performance-now@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
@@ -9313,6 +9318,14 @@ react-paginate@^5.2.1:
   resolved "https://registry.yarnpkg.com/react-paginate/-/react-paginate-5.3.1.tgz#bb8da341774e154c89b9e091ccb74ab1efa28ac2"
   integrity sha512-HcRUUWPR4mwmT41OiAi8qrezq75iJPqZPjIrtaT/ebGyZHDC6hJP363e6zNNCcvlL1Wgcq4BTbwkq1fkl7Nn5g==
   dependencies:
+    prop-types "^15.6.1"
+
+react-perfect-scrollbar@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/react-perfect-scrollbar/-/react-perfect-scrollbar-1.5.2.tgz#ea14f5e022c329e3b3f85e50645afafb85880ca7"
+  integrity sha512-sQDAFhB+gubJrx6mvG2QPB9ja6kKoD/WOpBb/ZfYiRNJ00EbjYBmKGhUjKEaaHIP9aETWrcCZsUMrH00NMBzDw==
+  dependencies:
+    perfect-scrollbar "^1.4.0"
     prop-types "^15.6.1"
 
 react-pose@^4.0.5:
