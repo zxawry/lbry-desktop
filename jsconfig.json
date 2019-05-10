@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "component/**/*": ["./src/ui/component/**/*"],
+      "constants/**/*": ["./src/ui/constants/**/*"],
+      "modal/**/*": ["./src/ui/modal/**/*"],
+      "page/**/*": ["./src/ui/page/**/*"],
+      "platforms/**/*": ["./src/ui/platforms/**/*"],
+      "redux/**/*": ["./src/ui/redux/**/*"],
+      "util/**/*": ["./src/ui/util/**/*"]
+    },
+    "baseUrl": "."
+  },
+  "exclude": ["node_modules"]
+}
